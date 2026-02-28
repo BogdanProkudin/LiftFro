@@ -22,6 +22,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("HELLO EVERYBODY");
+
   return (
     <html lang="en">
       <body
