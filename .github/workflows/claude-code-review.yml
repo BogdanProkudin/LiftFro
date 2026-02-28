@@ -69,16 +69,25 @@ jobs:
 
             Provide detailed feedback using inline comments for specific issues. Prefix each inline comment with the severity emoji.
 
-            IMPORTANT: If you find ANY 🔴 CRITICAL or 🟠 HIGH issues, you MUST exit with a non-zero exit code by running: exit 1
-            If there are only 🟡 MEDIUM and 🟢 LOW issues (or no issues), exit normally.
+            IMPORTANT: As the very last thing you output, you MUST print one of these exact lines:
+            - If ANY 🔴 CRITICAL or 🟠 HIGH issues were found, print exactly: REVIEW_RESULT:FAIL
+            - If only 🟡 MEDIUM and 🟢 LOW issues (or no issues), print exactly: REVIEW_RESULT:PASS
 
           # Tools for comprehensive PR review
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(exit:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
             --model claude-sonnet-4-5-20250929
 
-# When track_progress is enabled:
-# - Creates a tracking comment with progress checkboxes
-# - Includes all PR context (comments, attachments, images)
-# - Updates progress as the review proceeds
-# - Marks as completed when done
+      - name: Check review result
+        env:
+          REVIEW_OUTPUT: ${{ steps.claude-review.outputs.result }}
+        run: |
+          if echo "$REVIEW_OUTPUT" | grep -q "REVIEW_RESULT:FAIL"; then
+            echo "❌ Claude review found critical or high severity issues. Blocking merge."
+            exit 1
+          elif echo "$REVIEW_OUTPUT" | grep -q "REVIEW_RESULT:PASS"; then
+            echo "✅ Claude review passed."
+          else
+            echo "⚠️ Claude review did not output a clear result. Failing as a safety measure."
+            exit 1
+          fi
