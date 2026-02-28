@@ -22,7 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log("HELLO EVERYBODY22");
+  console.log("HELLO EVERYBODYdsd22");
 
   return (
     <html lang="en">
