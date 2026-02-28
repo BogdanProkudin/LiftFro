@@ -29,47 +29,70 @@ jobs:
           # Enable progress tracking
           track_progress: true
 
-          # Your custom review instructions
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
 
-            Perform a comprehensive code review with the following focus areas:
+            Review this PR thoroughly. Follow ALL rules from CLAUDE.md.
 
-            1. **Code Quality**
-               - Clean code principles and best practices
-               - Proper error handling and edge cases
-               - Code readability and maintainability
+            ## Review Checklist
 
-            2. **Security**
-               - Check for potential security vulnerabilities
-               - Validate input sanitization
-               - Review authentication/authorization logic
+            ### 🔒 Security
+            - Check for exposed secrets, API keys, tokens in code
+            - Verify all user input is validated (Zod schemas)
+            - Check auth guards on new endpoints (@UseGuards, @Public)
+            - Look for SQL injection risks (raw queries with user input)
+            - Check for XSS vectors (dangerouslySetInnerHTML, unescaped output)
 
-            3. **Performance**
-               - Identify potential performance bottlenecks
-               - Review database queries for efficiency
-               - Check for memory leaks or resource issues
+            ### 🏗️ Architecture (FSD)
+            - Verify layer import rules: app→pages→widgets→features→entities→shared
+            - Entities must NOT have mutations (only GET queries)
+            - Features must NOT render complex UI (only action hooks + small buttons)
+            - Widgets must NOT import from other widgets
+            - Shared must NOT contain business logic
+            - Check barrel exports (index.ts) on every slice
 
-            4. **Testing**
-               - Verify adequate test coverage
-               - Review test quality and edge cases
-               - Check for missing test scenarios
+            ### 📝 TypeScript
+            - Flag any use of `any` type — suggest `unknown` with type guard
+            - Check for missing return types on functions
+            - Verify exhaustive switch statements (no missing cases)
+            - Check proper nullability handling (no `!` assertions without justification)
 
-            5. **Documentation**
-               - Ensure code is properly documented
-               - Verify README updates for new features
-               - Check API documentation accuracy
+            ### ⚡ Performance
+            - Check for N+1 queries in Prisma (missing include/select)
+            - Verify pagination on list endpoints (no unbounded arrays)
+            - Look for missing `select` in Prisma queries (returning full objects)
+            - Check for heavy components that should be lazy loaded
 
-            For every issue found, assign a severity level:
-            - 🔴 CRITICAL: Security vulnerabilities (SQL injection, XSS, eval, hardcoded secrets/credentials, missing auth/authz, remote code execution, path traversal)
-            - 🟠 HIGH: Bugs that will cause runtime errors, data loss, or corruption; `any` types; missing input validation on API boundaries; unhandled promise rejections; race conditions
-            - 🟡 MEDIUM: Bad practices, poor error handling, performance issues, missing types, code smells
-            - 🟢 LOW: Style issues, naming, minor suggestions, documentation gaps
+            ### 🧪 Quality
+            - No console.log (use logger on backend)
+            - No commented-out code
+            - No TODO without linked issue number
+            - No hardcoded magic numbers or strings
+            - New endpoints must have Swagger decorators
+            - New pages must have loading.tsx and error.tsx
+            - Functions >50 lines should be split
+            - Components >200 lines should be split
 
-            Provide detailed feedback using inline comments for specific issues. Prefix each inline comment with the severity emoji.
+            ### 📛 Naming Conventions
+            - Files: kebab-case
+            - Components: PascalCase
+            - Functions/vars: camelCase
+            - Constants: UPPER_SNAKE_CASE
+            - Commits: Conventional Commits format
+            - API endpoints: kebab-case
+            - Boolean vars: is/has/can/should prefix
 
-            IMPORTANT: You MUST return a structured output with your verdict.
+            ## Output Format
+            For each issue found, provide:
+            1. **Severity**: 🔴 Critical | 🟡 Warning | 🔵 Suggestion
+            2. **File and line reference**
+            3. **What's wrong**
+            4. **How to fix** (with code example if helpful)
+
+            End with a summary: total issues by severity, overall assessment (✅ Approve / ⚠️ Changes Requested / 🔴 Block).
+
+            IMPORTANT: You MUST return a structured output with your verdict. Use FAIL if any 🔴 Critical issues exist.
 
           # Tools for comprehensive PR review
           claude_args: |
