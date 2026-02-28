@@ -61,26 +61,21 @@ jobs:
                - Verify README updates for new features
                - Check API documentation accuracy
 
-            Provide detailed feedback using inline comments for specific issues.
-            Use top-level comments for general observations or praise.
+            For every issue found, assign a severity level:
+            - 🔴 CRITICAL: Security vulnerabilities (SQL injection, XSS, eval, hardcoded secrets/credentials, missing auth/authz, remote code execution, path traversal)
+            - 🟠 HIGH: Bugs that will cause runtime errors, data loss, or corruption; `any` types; missing input validation on API boundaries; unhandled promise rejections; race conditions
+            - 🟡 MEDIUM: Bad practices, poor error handling, performance issues, missing types, code smells
+            - 🟢 LOW: Style issues, naming, minor suggestions, documentation gaps
 
-            IMPORTANT: At the very end of your review, you MUST output a final verdict on a single line:
-            - If there are ANY critical issues (security vulnerabilities, hardcoded secrets, SQL injection, XSS, eval usage, missing auth, `any` types, or violations of the project CLAUDE.md rules), output exactly: VERDICT:FAIL
-            - If the code is acceptable (minor suggestions only), output exactly: VERDICT:PASS
+            Provide detailed feedback using inline comments for specific issues. Prefix each inline comment with the severity emoji.
+
+            IMPORTANT: If you find ANY 🔴 CRITICAL or 🟠 HIGH issues, you MUST exit with a non-zero exit code by running: exit 1
+            If there are only 🟡 MEDIUM and 🟢 LOW issues (or no issues), exit normally.
 
           # Tools for comprehensive PR review
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(exit:*)"
             --model claude-sonnet-4-5-20250929
-
-      - name: Check review verdict
-        run: |
-          RESULT="${{ steps.claude-review.outputs.result }}"
-          if echo "$RESULT" | grep -q "VERDICT:FAIL"; then
-            echo "❌ Claude review found critical issues. Blocking merge."
-            exit 1
-          fi
-          echo "✅ Claude review passed."
 
 # When track_progress is enabled:
 # - Creates a tracking comment with progress checkboxes
