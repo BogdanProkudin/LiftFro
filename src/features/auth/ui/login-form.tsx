@@ -48,11 +48,11 @@ const LoginForm = () => {
   };
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10">
-      <Title size={30} title={t("title")} />
+      <Title styles="text-[30px]" title={t("title")} />
       <Description styles="text-center my-2" description={t("description")} />
       <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
         <InputForm
-          label="Email"
+          label={t("emailLabel")}
           type="email"
           placeholder={t("emailPlaceholder")}
           register={register("email")}
@@ -61,7 +61,7 @@ const LoginForm = () => {
           style="login"
         />
         <InputForm
-          label="Password"
+          label={t("passwordLabel")}
           type="password"
           placeholder={t("passwordPlaceholder")}
           register={register("password")}
