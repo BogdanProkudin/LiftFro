@@ -1,26 +1,214 @@
 @import "tailwindcss";
 
+/* ============================================================
+   🎨 DESIGN TOKENS — Global Color System
+   ============================================================
+   Структура:
+     - Base          → фоны, бордеры
+     - Text          → основной / вторичный / описания
+     - Brand/Accent  → primary (синий #007aff / #4da3ff)
+     - Status        → success, error
+     - Gradients     → purple/blue/emerald (используются в компонентах)
+     - Shadows       → soft, medium
+   ============================================================ */
+
+/* ☀️ LIGHT THEME */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ─── Base ─────────────────────────────────────────────── */
+  --color-bg: #ffffff; /* Основной фон страницы */
+  --color-bg-secondary: #f7f8fa; /* Фон карточек, секций */
+  --color-border: #e0e0e0; /* Разделители, обводки */
+
+  /* ─── Text ─────────────────────────────────────────────── */
+  --default-text-color: black;
+  --color-text-primary: #1a1a1a; /* Заголовки, основной текст */
+  --color-text-secondary: #555555; /* Вторичный текст */
+  --description-text-color: #5f758c; /* Подписи, описания */
+
+  /* ─── Brand / Accent ────────────────────────────────────── */
+  --color-primary: #007aff; /* Кнопки, иконки, акценты */
+  --color-primary-hover: #005fcc; /* Hover-состояние primary */
+
+  /* ─── Gradient Palette ──────────────────────────────────── */
+  /*
+    Используются в компонентах ProgramCreationSection, HeroSection и др.
+
+    Purple:  purple-400 (#c084fc)  →  purple-500 (#a855f7)  →  purple-600 (#9333ea)
+    Blue:    blue-400   (#60a5fa)  →  blue-500   (#3b82f6)  →  cyan-500   (#06b6d4)
+    Emerald: emerald-400(#34d399)  →  emerald-500(#10b981)  →  teal-500   (#14b8a6)
+     также дополнительный цвет: text-orange-500 для огонька или подчёркивания важных элементов
+    Типичные применения:
+      Заголовки:   from-purple-400 via-blue-400 to-emerald-400
+      AI карточка: from-purple-500/20 to-pink-500/20
+      Custom:      from-blue-500/20 to-cyan-500/20
+      Advanced:    from-emerald-500/20 to-teal-500/20
+      Кнопки:      from-[--color-primary] to-purple-500
+  */
+
+  /* ─── Status ────────────────────────────────────────────── */
+  --color-success: #34c759; /* Успех, галочки */
+  --color-error: #ff3b30; /* Ошибки */
+
+  /* ─── Shadows ────────────────────────────────────────────── */
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.12);
+
+  /* ─── Misc ──────────────────────────────────────────────── */
+  --radius: 0.625rem;
+
+  /* ─── shadcn/ui tokens (light) ──────────────────────────── */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================
+   🌑 DARK THEME
+   ============================================================ */
+.dark {
+  /* ─── Base ─────────────────────────────────────────────── */
+  --color-bg: #0e0e10; /* Основной фон (почти чёрный) */
+  --color-bg-secondary: #1a1a1a; /* Фон карточек */
+  --color-border: #2c2c2e; /* Тонкие разделители */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* ─── Text ─────────────────────────────────────────────── */
+  --default-text-color: white;
+  --color-text-primary: #ededed; /* Основной текст */
+  --color-text-secondary: #a1a1aa; /* Вторичный текст */
+  --description-text-color: #a4a4a4; /* Описания, подписи */
+
+  /* ─── Brand / Accent ────────────────────────────────────── */
+  --color-primary: #4da3ff; /* Светлее, чтобы читалось на тёмном */
+  --color-primary-hover: #6dbdff; /* Hover — ещё светлее */
+
+  /* ─── Status ────────────────────────────────────────────── */
+  --color-success: #30d158;
+  --color-error: #ff453a;
+
+  /* ─── Shadows ────────────────────────────────────────────── */
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.6);
+
+  /* ─── shadcn/ui tokens (dark) ───────────────────────────── */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-foreground);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+@theme {
+  --container-center: true;
+  --container-padding: 1.5rem 2rem;
+  --breakpoint-xl: 1880px;
+}
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
