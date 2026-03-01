@@ -1,9 +1,11 @@
+import { authReducer } from "@/features/auth/model/auth-slice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const makeStore = () => {
   return configureStore({
-    // tODO: add reducers here
-    reducer: (state = {}) => state,
+    reducer: {
+      authReducer,
+    },
   });
 };
 
