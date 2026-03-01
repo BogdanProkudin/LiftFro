@@ -10,7 +10,7 @@ Two fullstack developers work in vertical slices. Each developer owns their feat
 - **Framework**: Next.js 14 (App Router)
 - **Architecture**: Feature-Sliced Design (FSD)
 - **UI**: Tailwind CSS + shadcn/ui
-- **State**: Zustand (client), TanStack React Query (server)
+- **State**: ReduxToolkit (client), TanStack React Query (server)
 - **Forms**: React Hook Form + Zod
 - **Types**: Auto-generated from backend Swagger via `orval` (`src/generated/api-types.ts`)
 - **Language**: TypeScript (strict mode)
@@ -45,13 +45,13 @@ Every slice follows the same internal structure:
 ```
 <layer>/<slice-name>/
 ├── ui/            # React components
-├── model/         # Types, stores (Zustand), computed logic
+├── model/         # Types, stores (ReduxToolkit), computed logic
 ├── api/           # API calls (entities only: GET queries)
 └── index.ts       # Barrel export — public API of this slice
 ```
 
 - Always import through `index.ts` — never reach into internal files
-- `model/` in widgets can contain Zustand stores for local widget state
+- `model/` in widgets can contain ReduxToolkit stores for local widget state
 - `api/` in entities contains React Query hooks for GET requests
 
 ### Common Violations to Catch
@@ -171,7 +171,7 @@ Every slice follows the same internal structure:
 - **No `eval()`**, `Function()` constructor, or dynamic `import()` with user input
 - **Secrets**: never in client code — use `NEXT_PUBLIC_` only for non-sensitive values
 - **XSS**: React escapes by default — never bypass JSX escaping
-- **Auth tokens**: store in httpOnly cookies or in-memory (Zustand) — never localStorage
+- **Auth tokens**: store in httpOnly cookies or in-memory (ReduxToolkit) — never localStorage
 - **File uploads**: validate MIME type and size on frontend before sending
 - **User input**: validate with Zod before submitting to API
 - **External links**: add `rel="noopener noreferrer"` to `target="_blank"` links
