@@ -102,7 +102,7 @@ Every slice follows the same internal structure:
 - **Server Components by default** — add `'use client'` only when needed (state, effects, event handlers, browser APIs)
 - **Push `'use client'` as deep as possible** — wrap only the interactive part, not the whole page
 - **Max 200 lines per component file** — extract sub-components if longer
-- **Max 3 levels of JSX nesting** — extract to sub-component if deeper
+- **Avoid deep JSX nesting** — if nesting exceeds 5 levels or becomes hard to follow, extract sub-components
 - **No inline styles** — Tailwind classes only
 - **Use `cn()`** from `shared/lib/cn.ts` for conditional classes (clsx + tailwind-merge)
 - **No `index.tsx` inside `ui/` folders** — name component files after the component: `ui/workout-card.tsx` not `ui/index.tsx`. However, `index.ts` IS required at the slice root for barrel exports
@@ -191,6 +191,7 @@ Every slice follows the same internal structure:
 - **File uploads**: validate MIME type and size on frontend before sending
 - **User input**: validate with Zod before submitting to API
 - **External links**: add `rel="noopener noreferrer"` to `target="_blank"` links
+- **CSRF protection**: if using cookie-based auth, ensure the API enforces CSRF tokens or `SameSite=Strict` cookies
 
 ---
 
@@ -245,7 +246,7 @@ style(dashboard): fix stat card spacing on mobile
 - **Visual regression**: screenshot comparison for key pages
 - **Accessibility**: axe-core automated checks in CI
 - **No unit tests for simple components** — focus E2E on user flows
-- **Every new page**: must be covered by at least one E2E scenario
+- **Critical pages**: must be covered by at least one E2E scenario (auth flows, workout creation, dashboard, programs)
 
 ---
 
