@@ -101,13 +101,14 @@ jobs:
             --json-schema '{"type":"object","properties":{"verdict":{"type":"string","enum":["PASS","FAIL"]},"critical_count":{"type":"integer"},"high_count":{"type":"integer"},"summary":{"type":"string"}},"required":["verdict","critical_count","high_count","summary"]}'
 
       - name: Check review result
+        env:
+          REVIEW_OUTPUT: ${{ steps.claude-review.outputs.structured_output }}
         run: |
-          OUTPUT='${{ steps.claude-review.outputs.structured_output }}'
-          echo "Review output: $OUTPUT"
-          VERDICT=$(echo "$OUTPUT" | jq -r '.verdict')
-          CRITICAL=$(echo "$OUTPUT" | jq -r '.critical_count')
-          HIGH=$(echo "$OUTPUT" | jq -r '.high_count')
-          SUMMARY=$(echo "$OUTPUT" | jq -r '.summary')
+          echo "Review output: $REVIEW_OUTPUT"
+          VERDICT=$(echo "$REVIEW_OUTPUT" | jq -r '.verdict')
+          CRITICAL=$(echo "$REVIEW_OUTPUT" | jq -r '.critical_count')
+          HIGH=$(echo "$REVIEW_OUTPUT" | jq -r '.high_count')
+          SUMMARY=$(echo "$REVIEW_OUTPUT" | jq -r '.summary')
           echo "Verdict: $VERDICT | Critical: $CRITICAL | High: $HIGH"
           echo "Summary: $SUMMARY"
           if [ "$VERDICT" = "FAIL" ]; then
