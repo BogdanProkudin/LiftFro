@@ -90,7 +90,7 @@ jobs:
             3. **What's wrong**
             4. **How to fix** (with code example if helpful)
 
-            End with a summary: total issues by severity overall assessment (✅ Approve / ⚠️ Changes Requested / 🔴 Block).
+            End with a summary: total issues by severity, overall assessment (✅ Approve / ⚠️ Changes Requested / 🔴 Block).
 
             IMPORTANT: You MUST return a structured output with your verdict. Use FAIL if any 🔴 Critical issues exist.
 
