@@ -17,6 +17,22 @@ Two fullstack developers work in vertical slices. Each developer owns their feat
 
 ---
 
+## State Management Strategy
+
+- **Server state**: React Query — ALL API data (workouts, exercises, user profile, caching, revalidation)
+- **Global client state**: ReduxToolkit — UI state shared across multiple features (auth status, active workout session, sidebar open/closed)
+- **Local component state**: `useState`/`useReducer` — form inputs, modal open/closed, accordion expanded
+- **Widget state**: ReduxToolkit slices scoped to the widget (`widgets/<name>/model/store.ts`)
+
+When to use what:
+- React Query: any data that comes from or goes to the API
+- Redux: client-only state that multiple unrelated features need to read/write
+- Local state: state used by a single component or its direct children
+
+> **Note:** Auth tokens go in httpOnly cookies (server-managed) or Redux in-memory — never `localStorage`.
+
+---
+
 ## FSD Architecture — STRICT RULES
 
 ### Layer Hierarchy
@@ -34,7 +50,7 @@ app → pages → widgets → features → entities → shared
 | `app/`      | Next.js routing, layouts, providers                                                     | pages, widgets, features, entities, shared | Contain business logic                                          |
 | `pages/`    | Page composition (assembles widgets)                                                    | widgets, features, entities, shared        | Contain complex logic, only compose                             |
 | `widgets/`  | Self-contained UI blocks (sidebar, workout-logger, calendar-view)                       | features, entities, shared                 | Import from other widgets or pages                              |
-| `features/` | User actions = mutations (useCreateWorkout, useAddSet, StartButton)                     | entities, shared                           | Render complex UI, only action hooks + small trigger components |
+| `features/` | User actions = mutations (useCreateWorkout, useAddSet, StartButton)                     | entities, shared                           | Render complex UI (only action hooks + small trigger buttons allowed) |
 | `entities/` | Business objects = GET queries + types + display components (ExerciseCard, WorkoutCard) | shared                                     | Contain mutations (POST/PATCH/DELETE)                           |
 | `shared/`   | UI primitives (shadcn), utils, hooks, api-client, config, assets                        | nothing (bottom layer)                     | Contain any business logic                                      |
 
@@ -70,7 +86,7 @@ Every slice follows the same internal structure:
 - **Strict mode** — no exceptions
 - **No `any`** — use `unknown` + type guards. If `any` is truly unavoidable, add `// eslint-disable-next-line` with a comment explaining why
 - **`interface`** for object shapes, **`type`** for unions, intersections, mapped types
-- **Explicit return types** on all functions except React components and hooks
+- **Explicit return types** on all functions except React components. Custom hooks SHOULD have explicit return types for better type inference and IntelliSense
 - **`const` over `let`**, never `var`
 - **Optional chaining** (`?.`) and **nullish coalescing** (`??`) — no manual `if (x !== null && x !== undefined)`
 - **Exhaustive switches** — always handle all enum/union cases, use `never` for default
@@ -89,7 +105,7 @@ Every slice follows the same internal structure:
 - **Max 3 levels of JSX nesting** — extract to sub-component if deeper
 - **No inline styles** — Tailwind classes only
 - **Use `cn()`** from `shared/lib/cn.ts` for conditional classes (clsx + tailwind-merge)
-- **No `index.tsx` for components** — name the file after the component: `workout-card.tsx` not `index.tsx`
+- **No `index.tsx` inside `ui/` folders** — name component files after the component: `ui/workout-card.tsx` not `ui/index.tsx`. However, `index.ts` IS required at the slice root for barrel exports
 - **Props interface** must be defined above the component, named `<ComponentName>Props`
 - **Destructure props** in function signature
 - **No `React.FC`** — use plain function declarations: `export function WorkoutCard({ workout }: WorkoutCardProps) {}`
@@ -195,7 +211,7 @@ chore/<scope>           — chore/update-deps, chore/tailwind-config
 feat(workout): add set logging with optimistic UI
 fix(auth): handle expired refresh token redirect
 refactor(exercises): extract filter logic to custom hook
-chore(deps): bump next to 15.x
+chore(deps): update dependencies
 test(programs): add e2e for quick-build flow
 style(dashboard): fix stat card spacing on mobile
 ```
