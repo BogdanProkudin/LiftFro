@@ -6,6 +6,8 @@
   "LoginPage": {
     "title": "Welcome Back!",
     "description": "Log in to track your progress and achieve your fitness goals.",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
     "emailPlaceholder": "",
     "passwordPlaceholder": "",
     "forgotPassword": "Forgot password?",
@@ -22,5 +24,21 @@
     "InternalServerError": "An unexpected error occurred. Please try again later.",
     "BadRequest": "Invalid request. Please check your input and try again.",
     "SomeThingWentWrong": "Something went wrong. Please try again."
+  },
+  "Devider": {
+    "or": "OR"
+  },
+  "ValidationMessages": {
+    "nameRequired": "Nickname is required",
+    "nameMin": "Nickname must be at least 6 characters",
+    "nameMax": "Nickname must be at most 20 characters",
+    "emailRequired": "Email Address is required",
+    "emailInvalid": "Invalid email",
+    "emailDomainNotAllowed": "Email domain is not allowed",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 6 characters",
+    "passwordMax": "Password must be at most 20 characters",
+    "confirmPasswordRequired": "Confirm Password is required",
+    "confirmPasswordValid": "Passwords must match"
   }
 }
