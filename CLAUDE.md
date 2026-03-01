@@ -17,6 +17,22 @@ Two fullstack developers work in vertical slices. Each developer owns their feat
 
 ---
 
+## State Management Strategy
+
+- **Server state**: React Query — ALL API data (workouts, exercises, user profile, caching, revalidation)
+- **Global client state**: ReduxToolkit — UI state shared across multiple features (auth status, active workout session, sidebar open/closed)
+- **Local component state**: `useState`/`useReducer` — form inputs, modal open/closed, accordion expanded
+- **Widget state**: ReduxToolkit slices scoped to the widget (`widgets/<name>/model/store.ts`)
+
+When to use what:
+- React Query: any data that comes from or goes to the API
+- Redux: client-only state that multiple unrelated features need to read/write
+- Local state: state used by a single component or its direct children
+
+> **Note:** Auth tokens go in httpOnly cookies (server-managed) or Redux in-memory — never `localStorage`.
+
+---
+
 ## FSD Architecture — STRICT RULES
 
 ### Layer Hierarchy
@@ -34,7 +50,7 @@ app → pages → widgets → features → entities → shared
 | `app/`      | Next.js routing, layouts, providers                                                     | pages, widgets, features, entities, shared | Contain business logic                                          |
 | `pages/`    | Page composition (assembles widgets)                                                    | widgets, features, entities, shared        | Contain complex logic, only compose                             |
 | `widgets/`  | Self-contained UI blocks (sidebar, workout-logger, calendar-view)                       | features, entities, shared                 | Import from other widgets or pages                              |
-| `features/` | User actions = mutations (useCreateWorkout, useAddSet, StartButton)                     | entities, shared                           | Render complex UI, only action hooks + small trigger components |
+| `features/` | User actions = mutations (useCreateWorkout, useAddSet, StartButton)                     | entities, shared                           | Render complex UI (only action hooks + small trigger buttons allowed) |
 | `entities/` | Business objects = GET queries + types + display components (ExerciseCard, WorkoutCard) | shared                                     | Contain mutations (POST/PATCH/DELETE)                           |
 | `shared/`   | UI primitives (shadcn), utils, hooks, api-client, config, assets                        | nothing (bottom layer)                     | Contain any business logic                                      |
 
@@ -70,7 +86,7 @@ Every slice follows the same internal structure:
 - **Strict mode** — no exceptions
 - **No `any`** — use `unknown` + type guards. If `any` is truly unavoidable, add `// eslint-disable-next-line` with a comment explaining why
 - **`interface`** for object shapes, **`type`** for unions, intersections, mapped types
-- **Explicit return types** on all functions except React components and hooks
+- **Explicit return types** on all functions except React components. Custom hooks SHOULD have explicit return types for better type inference and IntelliSense
 - **`const` over `let`**, never `var`
 - **Optional chaining** (`?.`) and **nullish coalescing** (`??`) — no manual `if (x !== null && x !== undefined)`
 - **Exhaustive switches** — always handle all enum/union cases, use `never` for default
@@ -86,10 +102,10 @@ Every slice follows the same internal structure:
 - **Server Components by default** — add `'use client'` only when needed (state, effects, event handlers, browser APIs)
 - **Push `'use client'` as deep as possible** — wrap only the interactive part, not the whole page
 - **Max 200 lines per component file** — extract sub-components if longer
-- **Max 3 levels of JSX nesting** — extract to sub-component if deeper
+- **Avoid deep JSX nesting** — if nesting exceeds 5 levels or becomes hard to follow, extract sub-components
 - **No inline styles** — Tailwind classes only
 - **Use `cn()`** from `shared/lib/cn.ts` for conditional classes (clsx + tailwind-merge)
-- **No `index.tsx` for components** — name the file after the component: `workout-card.tsx` not `index.tsx`
+- **No `index.tsx` inside `ui/` folders** — name component files after the component: `ui/workout-card.tsx` not `ui/index.tsx`. However, `index.ts` IS required at the slice root for barrel exports
 - **Props interface** must be defined above the component, named `<ComponentName>Props`
 - **Destructure props** in function signature
 - **No `React.FC`** — use plain function declarations: `export function WorkoutCard({ workout }: WorkoutCardProps) {}`
@@ -175,6 +191,7 @@ Every slice follows the same internal structure:
 - **File uploads**: validate MIME type and size on frontend before sending
 - **User input**: validate with Zod before submitting to API
 - **External links**: add `rel="noopener noreferrer"` to `target="_blank"` links
+- **CSRF protection**: if using cookie-based auth, ensure the API enforces CSRF tokens or `SameSite=Strict` cookies
 
 ---
 
@@ -195,7 +212,7 @@ chore/<scope>           — chore/update-deps, chore/tailwind-config
 feat(workout): add set logging with optimistic UI
 fix(auth): handle expired refresh token redirect
 refactor(exercises): extract filter logic to custom hook
-chore(deps): bump next to 15.x
+chore(deps): update dependencies
 test(programs): add e2e for quick-build flow
 style(dashboard): fix stat card spacing on mobile
 ```
@@ -229,7 +246,7 @@ style(dashboard): fix stat card spacing on mobile
 - **Visual regression**: screenshot comparison for key pages
 - **Accessibility**: axe-core automated checks in CI
 - **No unit tests for simple components** — focus E2E on user flows
-- **Every new page**: must be covered by at least one E2E scenario
+- **Critical pages**: must be covered by at least one E2E scenario (auth flows, workout creation, dashboard, programs)
 
 ---
 
