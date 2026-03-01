@@ -1,8 +1,26 @@
 {
+  "AuthLayout": {
+    "title": "Start Your Fitness Journey Today.",
+    "description": "Track your progress, set new goals, and get motivated with our fitness app."
+  },
+  "LoginPage": {
+    "title": "Welcome Back!",
+    "description": "Log in to track your progress and achieve your fitness goals.",
+    "emailPlaceholder": "",
+    "passwordPlaceholder": "",
+    "forgotPassword": "Forgot password?",
+    "submit": "Submit",
+    "needAccount": "Need an account?",
+    "redirectMessage": "Firstly you need to login!",
+    "register": "Sign Up",
+    "ErrorGlobalMess": "Something went wrong. Please try again."
+  },
   "Errors": {
     "Unauthorized": "Unauthorized access. Please log in to continue.",
     "Forbidden": "You do not have permission to access this resource.",
     "NotFound": "The requested resource was not found.",
-    "InternalServerError": "An unexpected error occurred. Please try again later."
+    "InternalServerError": "An unexpected error occurred. Please try again later.",
+    "BadRequest": "Invalid request. Please check your input and try again.",
+    "SomeThingWentWrong": "Something went wrong. Please try again."
   }
 }
