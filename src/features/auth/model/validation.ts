@@ -79,11 +79,11 @@ export const recoverPassSchema = z
       .min(6, "passwordMin")
       .max(20, "passwordMax"),
 
-    confirmPassword: z.string().nonempty("Confirm Password is required"),
+    confirmPassword: z.string().nonempty("confirmPasswordRequired"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
-    message: "Passwords must match",
+    message: "confirmPasswordValid",
   });
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>;

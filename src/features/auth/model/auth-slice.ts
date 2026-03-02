@@ -8,19 +8,13 @@ import { authApi } from "./auth-api";
 
 type initialStateProps = {
   user: User | null;
-  data: {
-    user: {
-      email: string;
-      name: string;
-    };
-  } | null;
+
   status: Status;
   error: string | null;
 };
 
 const initialState: initialStateProps = {
   user: null,
-  data: null,
   status: Status.IDLE,
   error: null,
 };
@@ -55,16 +49,20 @@ const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.status = Status.LOADING;
         state.error = null;
-        state.data = null;
       })
       .addCase(login.fulfilled, (state) => {
         state.status = Status.SUCCEEDED;
+
+        state.error = null;
       })
-      .addCase(login.rejected, (state, action) => {
-        state.status = Status.FAILED;
-        state.data = null;
-        state.error = action.error.message || "Something went wrong";
-      });
+      .addCase(
+        login.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.status = Status.FAILED;
+
+          state.error = action.payload || "Something went wrong";
+        },
+      );
   },
 });
 export const { setUser } = authSlice.actions;

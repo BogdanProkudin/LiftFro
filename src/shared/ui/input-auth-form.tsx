@@ -49,6 +49,7 @@ export const InputForm = ({
     <div className="relative w-full mb-5">
       <div className="relative">
         <motion.div
+          initial={false}
           animate={{ opacity: isFocused ? 1 : 0 }}
           transition={{ duration: 0.3 }}
           className={`pointer-events-none absolute inset-0 rounded-xl ${
@@ -124,7 +125,7 @@ export const InputForm = ({
             whileHover={{ scale: 1.15 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className={`absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors duration-200 ${
+            className={`absolute right-3 top-1/2 cursor-pointer -translate-y-1/2 rounded-md p-1 transition-colors duration-200 ${
               isFocused ? "text-[#007aff]" : "text-gray-500 hover:text-gray-300"
             }`}
           >
