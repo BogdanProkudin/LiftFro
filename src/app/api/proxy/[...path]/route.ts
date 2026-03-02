@@ -117,6 +117,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
       headers: responseHeaders,
     });
   } catch (error) {
+    console.error("Upstream request failed", error);
     return NextResponse.json(
       { error: "Upstream request failed" },
       { status: 502 },
