@@ -47,8 +47,9 @@ const RegistrationForm = () => {
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
-      const result = await dispatch(registration(data)).unwrap();
-      if (result.message === "User created successfully") {
+      await dispatch(registration(data));
+
+      if (status === Status.SUCCEEDED) {
         router.push("/");
       } else {
         throw new Error(errorT("SomeThingWentWrong"));

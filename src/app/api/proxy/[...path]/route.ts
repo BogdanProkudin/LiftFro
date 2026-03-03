@@ -117,17 +117,7 @@ async function handler(req: NextRequest): Promise<NextResponse> {
     };
     const response = await fetch(url, fetchOptions);
 
-    console.log(response);
-    console.log(response);
     const responseHeaders = buildResponseHeaders(response);
-
-    const setCookieValues: string[] = [];
-    responseHeaders.forEach((value, key) => {
-      if (key.toLowerCase() === "set-cookie") {
-        setCookieValues.push(value);
-      }
-    });
-    responseHeaders.delete("set-cookie");
 
     const nextResponse = new NextResponse(response.body, {
       status: response.status,
@@ -135,21 +125,6 @@ async function handler(req: NextRequest): Promise<NextResponse> {
       headers: responseHeaders,
     });
 
-    setCookieValues.forEach((cookie) => {
-      nextResponse.headers.append("set-cookie", cookie);
-    });
-
-    console.log("=== SET-COOKIE DEBUG ===");
-    console.log("1. Raw from backend:", response.headers.getSetCookie?.());
-    console.log("2. setCookieValues array:", setCookieValues);
-    console.log(
-      "3. Final response headers set-cookie:",
-      nextResponse.headers.getSetCookie?.(),
-    );
-    console.log("4. All final headers:");
-    nextResponse.headers.forEach((value, key) => {
-      console.log(`  ${key}: ${value}`);
-    });
     return nextResponse;
   } catch (error) {
     // Temporary structured logging until proper logger is added
