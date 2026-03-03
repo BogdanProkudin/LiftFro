@@ -17,7 +17,7 @@ import Title from "@/shared/ui/text/title";
 import Description from "@/shared/ui/text/description";
 import Link from "next/link";
 import { useAppSelector } from "@/shared/hooks/redux-hook";
-import { LoaderCircle } from "lucide-react";
+
 import { Status } from "@/shared/types/status";
 import ButtonDefault from "@/shared/ui/buttons/button-default";
 
@@ -46,8 +46,9 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
-      const result = await dispatch(login(data)).unwrap();
-      if (result.message === "User login successfully") {
+      await dispatch(login(data));
+
+      if (status === Status.SUCCEEDED) {
         router.push("/");
       } else {
         throw new Error(errorT("SomeThingWentWrong"));
