@@ -1,13 +1,9 @@
-export {
-  loginSchema,
-  registrationSchema,
-  forgotPassSchema,
-  recoverPassSchema,
-} from "./model/validation";
+export { login, registration, setUser, authReducer } from "./model/auth-slice";
+export { authApi } from "./model/auth-api";
 export type {
-  RegistrationFormData,
-  LoginFormData,
-  ForgotPassData,
-  RecoverPassData,
-} from "./model/validation";
-export { default as LoginForm } from "./ui/login-form";
+  LoginResponse,
+  RegistrationResponse,
+  AuthData,
+  LoginData,
+  RegistrationData,
+} from "./model/types";
