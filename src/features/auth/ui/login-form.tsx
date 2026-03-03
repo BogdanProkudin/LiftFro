@@ -13,8 +13,6 @@ import { useAppDispatch } from "@/shared/hooks/redux-hook";
 import { InputForm } from "@/shared/ui/inputs/input-auth-form";
 import { Devider } from "@/shared/ui/devider";
 
-import Title from "@/shared/ui/text/title";
-import Description from "@/shared/ui/text/description";
 import Link from "next/link";
 import { useAppSelector } from "@/shared/hooks/redux-hook";
 
@@ -59,67 +57,63 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10">
-      <Title styles="text-[30px]" title={t("title")} />
-      <Description styles="text-center my-2" description={t("description")} />
-      <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
-        <InputForm
-          label={t("emailLabel")}
-          type="email"
-          placeholder={t("emailPlaceholder")}
-          register={register("email")}
-          errorType="email"
-          errors={errors}
-          style="login"
-        />
-        <InputForm
-          label={t("passwordLabel")}
-          type="password"
-          placeholder={t("passwordPlaceholder")}
-          register={register("password")}
-          errorType="password"
-          errors={errors}
-          style="login"
-        />
-        <div className="flex w-full justify-end">
-          <Link
-            href="/forgot-password"
-            className="cursor-pointer text-sm text-[var(--color-text-secondary)] opacity-80 transition-all duration-300 ease-in-out hover:underline hover:opacity-100"
-          >
-            {t("forgotPassword")}
-          </Link>
-        </div>
+    <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
+      <InputForm
+        label={t("emailLabel")}
+        type="email"
+        placeholder={t("emailPlaceholder")}
+        register={register("email")}
+        errorType="email"
+        errors={errors}
+        style="login"
+      />
+      <InputForm
+        label={t("passwordLabel")}
+        type="password"
+        placeholder={t("passwordPlaceholder")}
+        register={register("password")}
+        errorType="password"
+        errors={errors}
+        style="login"
+      />
+      <div className="flex w-full justify-end">
+        <Link
+          href="/forgot-password"
+          className="cursor-pointer text-sm text-[var(--color-text-secondary)] opacity-80 transition-all duration-300 ease-in-out hover:underline hover:opacity-100"
+        >
+          {t("forgotPassword")}
+        </Link>
+      </div>
 
-        {error && (
-          <p className="mt-2 text-[14px] font-medium text-[var(--color-error)]">
-            {error}
-          </p>
-        )}
+      {error && (
+        <p className="mt-2 text-[14px] font-medium text-[var(--color-error)]">
+          {error}
+        </p>
+      )}
 
-        <ButtonDefault
-          styles="mt-4 w-full p-3"
-          text={t("submit")}
-          type="submit"
-          loading={status === Status.LOADING}
-          onClick={handleSubmit(onSubmit)}
-          disabled={!isFormValid}
-        />
+      <ButtonDefault
+        styles="mt-4 w-full p-3"
+        text={t("submit")}
+        type="submit"
+        loading={status === Status.LOADING}
+        onClick={handleSubmit(onSubmit)}
+        disabled={!isFormValid}
+      />
 
-        <Devider />
+      <Devider />
 
-        <div className="mt-4 flex flex-wrap items-center justify-end gap-[6px]">
-          <span className="text-[15px] text-[var(--color-text-secondary)] opacity-80">
-            {t("needAccount")}
-          </span>
-          <Link
-            href="/registration"
-            className="cursor-pointer text-[15px] text-[var(--color-primary)] underline opacity-90 transition-all duration-300 ease-in-out hover:text-[var(--color-primary-hover)] hover:opacity-100"
-          >
-            {t("register")}
-          </Link>
-        </div>
-      </form>
-    </div>
+      <div className="mt-4 flex flex-wrap items-center justify-end gap-[6px]">
+        <span className="text-[15px] text-[var(--color-text-secondary)] opacity-80">
+          {t("needAccount")}
+        </span>
+        <Link
+          href="/registration"
+          className="cursor-pointer text-[15px] text-[var(--color-primary)] underline opacity-90 transition-all duration-300 ease-in-out hover:text-[var(--color-primary-hover)] hover:opacity-100"
+        >
+          {t("register")}
+        </Link>
+      </div>
+    </form>
   );
 };
 
