@@ -18,6 +18,7 @@ import Description from "@/shared/ui/text/description";
 import Link from "next/link";
 import { Status } from "@/shared/types/status";
 import ButtonDefault from "@/shared/ui/buttons/button-default";
+import toast from "react-hot-toast";
 
 const RegistrationForm = () => {
   const { status } = useAppSelector((state) => state.auth);
@@ -47,12 +48,11 @@ const RegistrationForm = () => {
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
-      await dispatch(registration(data));
-
-      if (status === Status.SUCCEEDED) {
-        router.push("/");
+      const res = await dispatch(registration(data));
+      if (res.meta.requestStatus === "fulfilled") {
+        router.replace("/");
       } else {
-        throw new Error(errorT("SomeThingWentWrong"));
+        toast.error(errorT("SomeThingWentWrong"));
       }
     } catch (err: unknown) {
       const error = err as string;
