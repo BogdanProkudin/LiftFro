@@ -17,6 +17,22 @@
     "register": "Sign Up",
     "ErrorGlobalMess": "Something went wrong. Please try again."
   },
+  "RegistrationPage": {
+    "title": "Create an Account",
+    "description": "Join our community and start your fitness journey today.",
+    "usernameLabel": "Nickname",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "usernamePlaceholder": "",
+    "emailPlaceholder": "",
+    "passwordPlaceholder": "",
+    "submit": "Create Account",
+    "haveAccount": "Already have an account?",
+    "confirmPasswordPlaceholder": "",
+    "login": "Log In",
+    "ErrorGlobalMess": "Something went wrong. Please try again."
+  },
   "Errors": {
     "Unauthorized": "Unauthorized access. Please log in to continue.",
     "Forbidden": "You do not have permission to access this resource.",
@@ -29,9 +45,9 @@
     "or": "OR"
   },
   "ValidationMessages": {
-    "nameRequired": "Nickname is required",
-    "nameMin": "Nickname must be at least 6 characters",
-    "nameMax": "Nickname must be at most 20 characters",
+    "usernameRequired": "Nickname is required",
+    "usernameMin": "Nickname must be at least 4 characters",
+    "usernameMax": "Nickname must be at most 20 characters",
     "emailRequired": "Email Address is required",
     "emailInvalid": "Invalid email",
     "emailDomainNotAllowed": "Email domain is not allowed",

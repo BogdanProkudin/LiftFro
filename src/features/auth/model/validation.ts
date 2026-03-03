@@ -15,11 +15,11 @@ const allowedDomains = [
 
 export const registrationSchema = z
   .object({
-    name: z
+    username: z
       .string()
-      .nonempty("nameRequired")
-      .min(6, "nameMin")
-      .max(20, "nameMax"),
+      .nonempty("usernameRequired")
+      .min(4, "usernameMin")
+      .max(20, "usernameMax"),
 
     email: z
       .string()

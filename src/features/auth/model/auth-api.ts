@@ -1,7 +1,12 @@
 import axios from "../../../config/axios-config";
+import { LoginData, RegistrationData } from "./types";
 
 export const authApi = {
-  login: (data: { email: string; password: string }) =>
+  registration: (data: RegistrationData) =>
+    axios.post("auth/register", data, {
+      withCredentials: true,
+    }),
+  login: (data: LoginData) =>
     axios.post("auth/login", data, {
       withCredentials: true,
     }),
