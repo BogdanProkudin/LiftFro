@@ -61,77 +61,73 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10">
-      <Title styles="text-[30px]" title={t("title")} />
-      <Description styles="text-center my-2" description={t("description")} />
-      <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
-        <InputForm
-          label={t("usernameLabel")}
-          type="text"
-          placeholder={t("usernamePlaceholder")}
-          register={register("username")}
-          errorType="username"
-          errors={errors}
-          style="login"
-        />
-        <InputForm
-          label={t("emailLabel")}
-          type="email"
-          placeholder={t("emailPlaceholder")}
-          register={register("email")}
-          errorType="email"
-          errors={errors}
-          style="login"
-        />
-        <InputForm
-          label={t("passwordLabel")}
-          type="password"
-          placeholder={t("passwordPlaceholder")}
-          register={register("password")}
-          errorType="password"
-          errors={errors}
-          style="login"
-        />
-        <InputForm
-          label={t("confirmPasswordLabel")}
-          type="password"
-          placeholder={t("confirmPasswordPlaceholder")}
-          register={register("confirmPassword")}
-          errorType="confirmPassword"
-          errors={errors}
-          style="login"
-        />
+    <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
+      <InputForm
+        label={t("usernameLabel")}
+        type="text"
+        placeholder={t("usernamePlaceholder")}
+        register={register("username")}
+        errorType="username"
+        errors={errors}
+        style="login"
+      />
+      <InputForm
+        label={t("emailLabel")}
+        type="email"
+        placeholder={t("emailPlaceholder")}
+        register={register("email")}
+        errorType="email"
+        errors={errors}
+        style="login"
+      />
+      <InputForm
+        label={t("passwordLabel")}
+        type="password"
+        placeholder={t("passwordPlaceholder")}
+        register={register("password")}
+        errorType="password"
+        errors={errors}
+        style="login"
+      />
+      <InputForm
+        label={t("confirmPasswordLabel")}
+        type="password"
+        placeholder={t("confirmPasswordPlaceholder")}
+        register={register("confirmPassword")}
+        errorType="confirmPassword"
+        errors={errors}
+        style="login"
+      />
 
-        {error && (
-          <p className="mt-2 text-[14px] font-medium text-[var(--color-error)]">
-            {error}
-          </p>
-        )}
+      {error && (
+        <p className="mt-2 text-[14px] font-medium text-[var(--color-error)]">
+          {error}
+        </p>
+      )}
 
-        <ButtonDefault
-          styles="mt-4 w-full p-3"
-          text={t("submit")}
-          type="submit"
-          loading={status === Status.LOADING}
-          onClick={handleSubmit(onSubmit)}
-          disabled={!isFormValid}
-        />
+      <ButtonDefault
+        styles="mt-4 w-full p-3"
+        text={t("submit")}
+        type="submit"
+        loading={status === Status.LOADING}
+        onClick={handleSubmit(onSubmit)}
+        disabled={!isFormValid}
+      />
 
-        <Devider />
+      <Devider />
 
-        <div className="mt-4 flex flex-wrap items-center justify-end gap-[6px]">
-          <span className="text-[15px] text-[var(--color-text-secondary)] opacity-80">
-            {t("haveAccount")}
-          </span>
-          <Link
-            href="/login"
-            className="cursor-pointer text-[15px] text-[var(--color-primary)] underline opacity-90 transition-all duration-300 ease-in-out hover:text-[var(--color-primary-hover)] hover:opacity-100"
-          >
-            {t("login")}
-          </Link>
-        </div>
-      </form>
-    </div>
+      <div className="mt-4 flex flex-wrap items-center justify-end gap-[6px]">
+        <span className="text-[15px] text-[var(--color-text-secondary)] opacity-80">
+          {t("haveAccount")}
+        </span>
+        <Link
+          href="/login"
+          className="cursor-pointer text-[15px] text-[var(--color-primary)] underline opacity-90 transition-all duration-300 ease-in-out hover:text-[var(--color-primary-hover)] hover:opacity-100"
+        >
+          {t("login")}
+        </Link>
+      </div>
+    </form>
   );
 };
 

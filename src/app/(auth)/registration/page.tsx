@@ -1,12 +1,7 @@
-import RegistrationForm from "@/features/auth/ui/registration-form";
-import React from "react";
+import Registration from "@/widgets/registration";
 
 const RegistrationPage = () => {
-  return (
-    <div>
-      <RegistrationForm />
-    </div>
-  );
+  return <Registration />;
 };
 
 export default RegistrationPage;
