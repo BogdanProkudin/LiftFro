@@ -7,47 +7,48 @@ import { useTranslations } from "next-intl";
 
 import { useRouter } from "next/navigation";
 
-import { LoginFormData, loginSchema } from "../model/validation";
-import { login } from "../model/auth-slice";
-import { useAppDispatch } from "@/shared/hooks/redux-hook";
+import { RegistrationFormData, registrationSchema } from "../model/validation";
+import { registration } from "../model/auth-slice";
+import { useAppDispatch, useAppSelector } from "@/shared/hooks/redux-hook";
 import { InputForm } from "@/shared/ui/inputs/input-auth-form";
 import { Devider } from "@/shared/ui/devider";
 
 import Title from "@/shared/ui/text/title";
 import Description from "@/shared/ui/text/description";
 import Link from "next/link";
-import { useAppSelector } from "@/shared/hooks/redux-hook";
-import { LoaderCircle } from "lucide-react";
 import { Status } from "@/shared/types/status";
 import ButtonDefault from "@/shared/ui/buttons/button-default";
 
-const LoginForm = () => {
+const RegistrationForm = () => {
   const { status } = useAppSelector((state) => state.auth);
-  const t = useTranslations("LoginPage");
+  const t = useTranslations("RegistrationPage");
   const errorT = useTranslations("Errors");
   const dispatch = useAppDispatch();
 
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationSchema),
   });
 
+  const username = watch("username");
   const email = watch("email");
   const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
 
-  const isFormValid = email && password;
+  const isFormValid = username && email && password && confirmPassword;
 
   const [error, setError] = useState("");
 
-  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+  const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
-      const result = await dispatch(login(data)).unwrap();
-      if (result.message === "User login successfully") {
+      const result = await dispatch(registration(data)).unwrap();
+      if (result.message === "User created successfully") {
         router.push("/");
       } else {
         throw new Error(errorT("SomeThingWentWrong"));
@@ -57,11 +58,21 @@ const LoginForm = () => {
       setError(error || errorT("SomeThingWentWrong"));
     }
   };
+
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center px-6 py-10 sm:px-10">
       <Title styles="text-[30px]" title={t("title")} />
       <Description styles="text-center my-2" description={t("description")} />
       <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
+        <InputForm
+          label={t("usernameLabel")}
+          type="text"
+          placeholder={t("usernamePlaceholder")}
+          register={register("username")}
+          errorType="username"
+          errors={errors}
+          style="login"
+        />
         <InputForm
           label={t("emailLabel")}
           type="email"
@@ -80,14 +91,15 @@ const LoginForm = () => {
           errors={errors}
           style="login"
         />
-        <div className="flex w-full justify-end">
-          <Link
-            href="/forgot-password"
-            className="cursor-pointer text-sm text-[var(--color-text-secondary)] opacity-80 transition-all duration-300 ease-in-out hover:underline hover:opacity-100"
-          >
-            {t("forgotPassword")}
-          </Link>
-        </div>
+        <InputForm
+          label={t("confirmPasswordLabel")}
+          type="password"
+          placeholder={t("confirmPasswordPlaceholder")}
+          register={register("confirmPassword")}
+          errorType="confirmPassword"
+          errors={errors}
+          style="login"
+        />
 
         {error && (
           <p className="mt-2 text-[14px] font-medium text-[var(--color-error)]">
@@ -108,13 +120,13 @@ const LoginForm = () => {
 
         <div className="mt-4 flex flex-wrap items-center justify-end gap-[6px]">
           <span className="text-[15px] text-[var(--color-text-secondary)] opacity-80">
-            {t("needAccount")}
+            {t("haveAccount")}
           </span>
           <Link
-            href="/registration"
+            href="/login"
             className="cursor-pointer text-[15px] text-[var(--color-primary)] underline opacity-90 transition-all duration-300 ease-in-out hover:text-[var(--color-primary-hover)] hover:opacity-100"
           >
-            {t("register")}
+            {t("login")}
           </Link>
         </div>
       </form>
@@ -122,4 +134,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegistrationForm;

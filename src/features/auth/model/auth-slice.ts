@@ -1,5 +1,10 @@
 import { Status } from "@/shared/types/status";
-import { LoginData, LoginResponse } from "./types";
+import {
+  LoginData,
+  LoginResponse,
+  RegistrationData,
+  RegistrationResponse,
+} from "./types";
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -19,6 +24,28 @@ const initialState: initialStateProps = {
   error: null,
 };
 
+export const registration = createAsyncThunk<
+  RegistrationResponse,
+  RegistrationData,
+  { rejectValue: string }
+>(
+  "auth/register",
+  async ({ email, password, username }: RegistrationData, thunkAPI) => {
+    try {
+      const { data } = await authApi.registration({
+        email,
+        password,
+        username,
+      });
+
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<{ message: string; status: number }>;
+      const message = error.response?.data?.message || "Registration failed";
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
 export const login = createAsyncThunk<
   LoginResponse,
   LoginData,
@@ -45,14 +72,27 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(registration.pending, (state) => {
+        state.status = Status.LOADING;
+        state.error = null;
+      })
+      .addCase(registration.fulfilled, (state) => {
+        state.status = Status.SUCCEEDED;
+      })
+      .addCase(
+        registration.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.status = Status.FAILED;
 
+          state.error = action.payload || "Something went wrong";
+        },
+      )
       .addCase(login.pending, (state) => {
         state.status = Status.LOADING;
         state.error = null;
       })
       .addCase(login.fulfilled, (state) => {
         state.status = Status.SUCCEEDED;
-
         state.error = null;
       })
       .addCase(
