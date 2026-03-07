@@ -33,6 +33,31 @@
     "login": "Log In",
     "ErrorGlobalMess": "Something went wrong. Please try again."
   },
+  "ForgotPassPage": {
+    "title": "Reset Your Password",
+    "description": "Please provide the email address associated with your account. You’ll receive a link to create a new password.",
+    "sendEmail": "Send Email",
+    "submit": "Send Reset Link",
+    "emailLabel": "Email",
+    "link": "Remember your password? Back to login",
+    "emailPlaceholder": "",
+    "successMessage": "The password reset link was sent to your email",
+    "errorMessage": "Something went wrong. Please try again.",
+    "toastMessGlobal": "Something went wrong. Try again"
+  },
+  "ResetPasswordPage": {
+    "title": "Create a New Password",
+    "description": "Your new password must be secure and easy to remember",
+    "submit": "Reset Password",
+    "passwordPlaceholder": "",
+    "passwordLabel": "Password",
+    "confirmPasswordPlaceholder": "",
+    "confirmPasswordLabel": "Confirm Password",
+    "link": "Back to Login",
+    "toastMessSuccess": "Your password was reset",
+    "toastMessVerify": "Token is not valid",
+    "toastMessGlobal": "Something went wrong. Try again"
+  },
   "Errors": {
     "Unauthorized": "Unauthorized access. Please log in to continue.",
     "Forbidden": "You do not have permission to access this resource.",
@@ -56,5 +81,11 @@
     "passwordMax": "Password must be at most 20 characters",
     "confirmPasswordRequired": "Confirm Password is required",
     "confirmPasswordValid": "Passwords must match"
+  },
+  "ErrorPage": {
+    "title": "Oops! Something Went Wrong",
+    "description": "It looks like the link you followed is invalid or has expired. Please try requesting a new one.",
+    "backToLogin": "Return to Login",
+    "contactSupport": "Contact Support"
   }
 }

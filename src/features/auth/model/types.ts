@@ -21,3 +21,23 @@ export type AuthData = {
   username: string;
   confirmPassword?: string;
 };
+
+export type ForgotPasswordData = {
+  email: string;
+};
+export type ForgotPasswordResponse = {
+  message: string;
+};
+export type VerifyData = {
+  token: string;
+};
+export type VerifyResponse = {
+  valid: boolean;
+};
+export type ResetPasswordData = {
+  password: string;
+  token: string;
+};
+export type ResetPasswordResponse = {
+  message: string;
+};
