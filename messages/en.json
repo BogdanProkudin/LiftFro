@@ -33,6 +33,7 @@
     "login": "Log In",
     "ErrorGlobalMess": "Something went wrong. Please try again."
   },
+
   "ForgotPassPage": {
     "title": "Reset Your Password",
     "description": "Please provide the email address associated with your account. You’ll receive a link to create a new password.",
@@ -58,6 +59,7 @@
     "toastMessVerify": "Token is not valid",
     "toastMessGlobal": "Something went wrong. Try again"
   },
+
   "Errors": {
     "Unauthorized": "Unauthorized access. Please log in to continue.",
     "Forbidden": "You do not have permission to access this resource.",

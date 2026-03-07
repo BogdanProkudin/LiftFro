@@ -1,4 +1,5 @@
 import axios from "../../../config/axios-config";
+
 import {
   ForgotPasswordData,
   LoginData,
@@ -16,6 +17,7 @@ export const authApi = {
     axios.post("auth/login", data, {
       withCredentials: true,
     }),
+
   forgotPassword: (data: ForgotPasswordData) =>
     axios.post("auth/forgot-password", data),
 

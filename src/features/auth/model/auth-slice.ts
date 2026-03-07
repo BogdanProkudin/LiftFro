@@ -67,6 +67,7 @@ export const login = createAsyncThunk<
     return thunkAPI.rejectWithValue(message);
   }
 });
+
 export const forgotPassword = createAsyncThunk<
   ForgotPasswordResponse,
   ForgotPasswordData,
