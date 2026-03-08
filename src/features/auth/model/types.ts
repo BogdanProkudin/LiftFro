@@ -10,6 +10,8 @@ export type RegistrationData = {
   email: string;
   password: string;
   username: string;
+  locale: string;
+  theme: string;
 };
 export type RegistrationResponse = {
   message: string;

@@ -17,6 +17,13 @@
     "register": "Sign Up",
     "ErrorGlobalMess": "Something went wrong. Please try again."
   },
+  "PasswordStrength": {
+    "label": "Password",
+    "weak": "Weak",
+    "fair": "Fair",
+    "good": "Good",
+    "strong": "Strong"
+  },
   "RegistrationPage": {
     "title": "Create an Account",
     "description": "Join our community and start your fitness journey today.",
@@ -31,7 +38,8 @@
     "haveAccount": "Already have an account?",
     "confirmPasswordPlaceholder": "",
     "login": "Log In",
-    "ErrorGlobalMess": "Something went wrong. Please try again."
+    "ErrorGlobalMess": "Something went wrong. Please try again.",
+    "checkEmail": "Check your email for a verification link."
   },
 
   "ForgotPassPage": {
@@ -83,6 +91,15 @@
     "passwordMax": "Password must be at most 20 characters",
     "confirmPasswordRequired": "Confirm Password is required",
     "confirmPasswordValid": "Passwords must match"
+  },
+  "ErrorAuthPage": {
+    "badge": "Authentication Error",
+    "titleLine1": "Session expired",
+    "titleLine2": "Try Again",
+    "description": "Your verification token is invalid or has expired. Please log in again to continue.",
+    "backToLogin": "Log in again",
+    "getHelp": "Contact support",
+    "footerHint": "Token has expired · Please re-authenticate"
   },
   "ErrorPage": {
     "title": "Oops! Something Went Wrong",

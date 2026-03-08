@@ -36,12 +36,17 @@ export const registration = createAsyncThunk<
   { rejectValue: string }
 >(
   "auth/register",
-  async ({ email, password, username }: RegistrationData, thunkAPI) => {
+  async (
+    { email, password, username, locale, theme }: RegistrationData,
+    thunkAPI,
+  ) => {
     try {
       const { data } = await authApi.registration({
         email,
         password,
         username,
+        locale,
+        theme: theme.toUpperCase(),
       });
 
       return data;
@@ -52,6 +57,22 @@ export const registration = createAsyncThunk<
     }
   },
 );
+
+export const verifyRegistration = createAsyncThunk<
+  VerifyResponse,
+  VerifyData,
+  { rejectValue: string }
+>("auth/verifyRegistration", async ({ token }: { token: string }, thunkAPI) => {
+  try {
+    const { data } = await authApi.verifyRegistration({ token });
+
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<{ message: string; status: number }>;
+    const message = error.response?.data?.message || "Token is not valid";
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 export const login = createAsyncThunk<
   LoginResponse,
   LoginData,

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MainProvider } from "./providers";
 import { getLocale, getMessages } from "next-intl/server";
+import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +27,9 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const themeCookie = (await cookies()).get("theme")?.value ?? "system";
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html className={themeCookie} lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

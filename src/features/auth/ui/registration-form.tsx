@@ -3,7 +3,8 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 import { useRouter } from "next/navigation";
 
@@ -21,12 +22,13 @@ import ButtonDefault from "@/shared/ui/buttons/button-default";
 import toast from "react-hot-toast";
 
 const RegistrationForm = () => {
-  const { status } = useAppSelector((state) => state.auth);
-  const t = useTranslations("RegistrationPage");
-  const errorT = useTranslations("Errors");
-  const dispatch = useAppDispatch();
+  const { status, error } = useAppSelector((state) => state.auth);
 
-  const router = useRouter();
+  const t = useTranslations("RegistrationPage");
+
+  const locale = useLocale();
+  const { theme } = useTheme();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -41,25 +43,26 @@ const RegistrationForm = () => {
   const email = watch("email");
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
+  const [emailSent, setEmailSent] = useState(false);
 
   const isFormValid = username && email && password && confirmPassword;
 
-  const [error, setError] = useState("");
-
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
-    try {
-      const res = await dispatch(registration(data));
-      if (res.meta.requestStatus === "fulfilled") {
-        router.replace("/");
-      } else {
-        toast.error(errorT("SomeThingWentWrong"));
-      }
-    } catch (err: unknown) {
-      const error = err as string;
-      setError(error || errorT("SomeThingWentWrong"));
+    const res = await dispatch(
+      registration({ ...data, locale, theme: theme || "system" }),
+    );
+
+    if (res.meta.requestStatus === "fulfilled") {
+      setEmailSent(true);
     }
   };
-
+  if (emailSent) {
+    return (
+      <div className="text-center mt-4">
+        <p className="text-[var(--color-text-secondary)]">{t("checkEmail")}</p>
+      </div>
+    );
+  }
   return (
     <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
       <InputForm

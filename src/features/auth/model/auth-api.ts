@@ -27,4 +27,6 @@ export const authApi = {
     axios.post("auth/reset-password", data, {
       withCredentials: true,
     }),
+  verifyRegistration: (data: VerifyData) =>
+    axios.get(`auth/verify-register?token=${data.token}`),
 };
