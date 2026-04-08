@@ -23,7 +23,9 @@ const GoogleIcon = () => (
 );
 
 export const GoogleAuth = () => {
-  const handleGoogleAuth = async () => {};
+  const handleGoogleAuth = async () => {
+    window.location.href = "http://localhost:8080/auth/google";
+  };
 
   return (
     <AuthButton

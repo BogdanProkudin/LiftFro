@@ -1,4 +1,4 @@
-import axios from "../../../config/axios-config";
+import axios from "../../../shared/config/axios-config";
 
 import {
   ForgotPasswordData,

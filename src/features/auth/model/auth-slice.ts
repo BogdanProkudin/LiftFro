@@ -14,18 +14,15 @@ import {
 
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { User } from "@/shared/types/user";
+
 import { authApi } from "./auth-api";
 
 type initialStateProps = {
-  user: User | null;
-
   status: Status;
   error: string | null;
 };
 
 const initialState: initialStateProps = {
-  user: null,
   status: Status.IDLE,
   error: null,
 };
@@ -36,15 +33,11 @@ export const registration = createAsyncThunk<
   { rejectValue: string }
 >(
   "auth/register",
-  async (
-    { email, password, username, locale, theme }: RegistrationData,
-    thunkAPI,
-  ) => {
+  async ({ email, password, locale, theme }: RegistrationData, thunkAPI) => {
     try {
       const { data } = await authApi.registration({
         email,
         password,
-        username,
         locale,
         theme: theme.toUpperCase(),
       });
@@ -149,11 +142,7 @@ export const verifyToken = createAsyncThunk<
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registration.pending, (state) => {
@@ -231,8 +220,23 @@ const authSlice = createSlice({
 
           state.error = action.payload || "Something went wrong";
         },
+      )
+      .addCase(verifyRegistration.pending, (state) => {
+        state.status = Status.LOADING;
+        state.error = null;
+      })
+      .addCase(verifyRegistration.fulfilled, (state) => {
+        state.status = Status.SUCCEEDED;
+      })
+      .addCase(
+        verifyRegistration.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.status = Status.FAILED;
+
+          state.error = action.payload || "Something went wrong";
+        },
       );
   },
 });
-export const { setUser } = authSlice.actions;
+
 export const authReducer = authSlice.reducer;

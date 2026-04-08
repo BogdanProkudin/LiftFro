@@ -7,6 +7,7 @@ interface ButtonApplyProps {
   rightIcon?: React.ReactNode;
   onClick?: () => void;
   animation?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const ButtonApply = ({
@@ -16,6 +17,7 @@ const ButtonApply = ({
   onClick,
   styles,
   animation,
+  type = "button",
 }: ButtonApplyProps) => {
   return (
     <>
@@ -26,6 +28,7 @@ const ButtonApply = ({
           transition={{ type: "spring", stiffness: 200 }}
         >
           <button
+            type={type}
             className={` text-white cursor-pointer transition-colors ease-in-out rounded-xl bg-gradient-to-r from-[var(--color-primary)] to-purple-500 flex items-center gap-2 ${styles ? styles : "px-4 py-2"}`}
             onClick={onClick}
           >
@@ -36,6 +39,7 @@ const ButtonApply = ({
         </motion.div>
       ) : (
         <button
+          type={type}
           className={` text-white cursor-pointer transition-colors ease-in-out rounded-xl bg-gradient-to-r from-[var(--color-primary)] to-purple-500 flex items-center gap-2  hover:from-[var(--color-primary-hover)] hover:to-purple-600 hover:shadow-2xl hover:shadow-blue-500/30 ${styles ? styles : "px-4 py-2"}`}
           onClick={onClick}
         >
