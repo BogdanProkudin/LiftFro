@@ -1,4 +1,5 @@
 "use client";
+import { getBackUrl } from "@/shared/server-actions/get-backend-url";
 import { AuthButton } from "@/shared/ui/buttons/button-oauth";
 
 const GoogleIcon = () => (
@@ -24,7 +25,8 @@ const GoogleIcon = () => (
 
 export const GoogleAuth = () => {
   const handleGoogleAuth = async () => {
-    window.location.href = "http://localhost:8080/auth/google";
+    const url = await getBackUrl();
+    window.location.href = `${url}/auth/google`;
   };
 
   return (

@@ -4,6 +4,7 @@ import { IntlProvider } from "./intl-provider";
 import { ModeProvider } from "./theme-provider";
 import { ReduxProvider } from "./redux-provider";
 import { ToastProvider } from "./toast-provider";
+import { AuthGuardProvider } from "./auth-guard-provider";
 import { User } from "@/entities/user";
 
 export const MainProvider = ({
@@ -20,9 +21,11 @@ export const MainProvider = ({
   return (
     <ModeProvider>
       <ReduxProvider initialUser={initialUser}>
-        <IntlProvider locale={locale} messages={messages}>
-          {children}
-        </IntlProvider>
+        <AuthGuardProvider>
+          <IntlProvider locale={locale} messages={messages}>
+            {children}
+          </IntlProvider>
+        </AuthGuardProvider>
       </ReduxProvider>
       <ToastProvider></ToastProvider>
     </ModeProvider>

@@ -1,6 +1,12 @@
-import axios, { AxiosInstance } from "axios";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "/api/proxy/";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || "/api/proxy";
+
+type RetriableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
 
 interface FailedRequest {
   resolve: (value?: unknown) => void;
@@ -10,7 +16,7 @@ interface FailedRequest {
 let isRefreshing = false;
 let failedQueue: FailedRequest[] = [];
 
-const processQueue = (error: unknown = null) => {
+const processQueue = (error: unknown = null): void => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -21,6 +27,25 @@ const processQueue = (error: unknown = null) => {
   failedQueue = [];
 };
 
+const AUTH_REFRESH_FAILED_EVENT = "auth:refresh-failed";
+
+export const onAuthRefreshFailed = (callback: () => void): (() => void) => {
+  window.addEventListener(AUTH_REFRESH_FAILED_EVENT, callback);
+  return () => window.removeEventListener(AUTH_REFRESH_FAILED_EVENT, callback);
+};
+
+const emitAuthRefreshFailed = (): void => {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_REFRESH_FAILED_EVENT));
+  }
+};
+
+const isAuthRejection = (error: unknown): boolean => {
+  if (!axios.isAxiosError(error)) return false;
+  const status = error.response?.status;
+  return status === 401 || status === 403;
+};
+
 const createAxios = (): AxiosInstance => {
   const instance = axios.create({
     baseURL: BASE_URL,
@@ -29,43 +54,46 @@ const createAxios = (): AxiosInstance => {
 
   instance.interceptors.response.use(
     (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
+    async (error: AxiosError) => {
+      const originalRequest = error.config as RetriableRequest | undefined;
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
-        if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject });
-          })
-            .then(() => {
-              return instance(originalRequest);
-            })
-            .catch((err) => {
-              return Promise.reject(err);
-            });
-        }
+      if (
+        !originalRequest ||
+        error.response?.status !== 401 ||
+        originalRequest._retry
+      ) {
+        return Promise.reject(error);
+      }
 
-        originalRequest._retry = true;
-        isRefreshing = true;
-
+      if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          axios
-            .post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true })
-            .then(() => {
-              processQueue(null);
-              resolve(instance(originalRequest));
-            })
-            .catch((err) => {
-              processQueue(err);
-              reject(err);
-            })
-            .finally(() => {
-              isRefreshing = false;
-            });
+          failedQueue.push({ resolve, reject });
+        }).then(() => {
+          originalRequest._retry = true;
+          return instance(originalRequest);
         });
       }
 
-      return Promise.reject(error);
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        await axios.post(
+          `${BASE_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        );
+        processQueue(null);
+        return instance(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError);
+        if (isAuthRejection(refreshError)) {
+          emitAuthRefreshFailed();
+        }
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     },
   );
 
