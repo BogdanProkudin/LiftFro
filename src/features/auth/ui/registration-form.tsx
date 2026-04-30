@@ -3,30 +3,28 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useTranslations } from "next-intl";
-
-import { useRouter } from "next/navigation";
-
+import { useLocale, useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
+import { motion } from "framer-motion";
+import { MailCheck, ArrowRight } from "lucide-react";
 import { RegistrationFormData, registrationSchema } from "../model/validation";
 import { registration } from "../model/auth-slice";
 import { useAppDispatch, useAppSelector } from "@/shared/hooks/redux-hook";
 import { InputForm } from "@/shared/ui/inputs/input-auth-form";
 import { Devider } from "@/shared/ui/devider";
 
-import Title from "@/shared/ui/text/title";
-import Description from "@/shared/ui/text/description";
 import Link from "next/link";
 import { Status } from "@/shared/types/status";
 import ButtonDefault from "@/shared/ui/buttons/button-default";
-import toast from "react-hot-toast";
 
 const RegistrationForm = () => {
-  const { status } = useAppSelector((state) => state.auth);
-  const t = useTranslations("RegistrationPage");
-  const errorT = useTranslations("Errors");
-  const dispatch = useAppDispatch();
+  const { status, error } = useAppSelector((state) => state.auth);
 
-  const router = useRouter();
+  const t = useTranslations("RegistrationPage");
+
+  const locale = useLocale();
+  const { theme } = useTheme();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -37,40 +35,65 @@ const RegistrationForm = () => {
     resolver: zodResolver(registrationSchema),
   });
 
-  const username = watch("username");
   const email = watch("email");
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
+  const [emailSent, setEmailSent] = useState(false);
 
-  const isFormValid = username && email && password && confirmPassword;
-
-  const [error, setError] = useState("");
+  const isFormValid = !!(email && password && confirmPassword);
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
-    try {
-      const res = await dispatch(registration(data));
-      if (res.meta.requestStatus === "fulfilled") {
-        router.replace("/");
-      } else {
-        toast.error(errorT("SomeThingWentWrong"));
-      }
-    } catch (err: unknown) {
-      const error = err as string;
-      setError(error || errorT("SomeThingWentWrong"));
+    const res = await dispatch(
+      registration({ ...data, locale, theme: theme || "system" }),
+    );
+
+    if (res.meta.requestStatus === "fulfilled") {
+      setEmailSent(true);
     }
   };
-
+  if (emailSent) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="mt-8 flex w-full flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-md shadow-2xl"
+      >
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 ring-8 ring-emerald-500/5">
+          <motion.div
+            initial={{ scale: 0, rotate: -45 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{
+              delay: 0.2,
+              type: "spring",
+              stiffness: 400,
+              damping: 15,
+            }}
+          >
+            <MailCheck size={40} />
+          </motion.div>
+        </div>
+        <h3 className="mb-2 text-xl font-bold tracking-tight text-white">
+          {t("successTitle")}
+        </h3>
+        <p className="max-w-[260px] text-sm leading-relaxed text-[var(--color-text-secondary)]">
+          {t("checkEmail")}
+        </p>
+        <Link
+          href="/login"
+          className="group mt-8 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-white/10 hover:shadow-lg active:scale-95"
+        >
+          {t("goToLogin")}
+          <ArrowRight
+            size={16}
+            className="transition-transform group-hover:translate-x-1"
+          />
+        </Link>
+      </motion.div>
+    );
+  }
   return (
     <form className="w-full mt-4" onSubmit={handleSubmit(onSubmit)}>
-      <InputForm
-        label={t("usernameLabel")}
-        type="text"
-        placeholder={t("usernamePlaceholder")}
-        register={register("username")}
-        errorType="username"
-        errors={errors}
-        style="login"
-      />
       <InputForm
         label={t("emailLabel")}
         type="email"

@@ -7,6 +7,105 @@ import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthData } from "@/features/auth/model/types";
 
+type StrengthLevel = 0 | 1 | 2 | 3 | 4;
+
+interface StrengthResult {
+  level: StrengthLevel;
+  label: string;
+  color: string;
+  glow: string;
+  width: string;
+}
+
+const getPasswordStrength = (password: string): StrengthResult => {
+  if (!password)
+    return { level: 0, label: "", color: "", glow: "", width: "0%" };
+
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
+  if (/[0-9]/.test(password)) score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+
+  if (score <= 1)
+    return {
+      level: 1,
+      label: "weak",
+      color: "from-red-500 via-red-400 to-red-500",
+      glow: "rgba(239,68,68,0.4)",
+      width: "25%",
+    };
+  if (score === 2)
+    return {
+      level: 2,
+      label: "fair",
+      color: "from-orange-500 via-amber-400 to-orange-500",
+      glow: "rgba(251,146,60,0.4)",
+      width: "50%",
+    };
+  if (score === 3 || score === 4)
+    return {
+      level: 3,
+      label: "good",
+      color: "from-emerald-500 via-green-400 to-emerald-500",
+      glow: "rgba(52,211,153,0.4)",
+      width: "75%",
+    };
+  return {
+    level: 4,
+    label: "strong",
+    color: "from-[#007aff] via-cyan-400 to-[#007aff]",
+    glow: "rgba(0,122,255,0.5)",
+    width: "100%",
+  };
+};
+
+const StrengthBar = ({ password }: { password: string }) => {
+  const t = useTranslations("PasswordStrength");
+  const strength = getPasswordStrength(password);
+  const show = password.length > 0;
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial={{ opacity: 0, y: -4, height: 0 }}
+          animate={{ opacity: 1, y: 0, height: "auto" }}
+          exit={{ opacity: 0, y: -4, height: 0 }}
+          transition={{ duration: 0.22, ease: "easeOut" }}
+          className="mt-2.5 overflow-hidden px-0.5"
+        >
+          <div className="relative h-[3px] w-full rounded-full bg-white/8 overflow-hidden">
+            <motion.div
+              className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${strength.color}`}
+              initial={false}
+              animate={{ width: strength.width }}
+              transition={{ type: "spring", stiffness: 260, damping: 28 }}
+              style={{
+                boxShadow: `0 0 8px 1px ${strength.glow}`,
+              }}
+            />
+          </div>
+
+          <motion.p
+            key={strength.label}
+            initial={{ opacity: 0, x: -4 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.18 }}
+            className="mt-1.5 pl-0.5 text-[11px] font-medium tracking-wide"
+            style={{
+              color: `${strength.glow.replace("0.4", "0.9").replace("0.5", "0.95")}`,
+            }}
+          >
+            {t(strength.label)} {t("label")}
+          </motion.p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 type InputProps = {
   label: string;
   type: string;
@@ -16,6 +115,7 @@ type InputProps = {
   register: UseFormRegisterReturn;
   style: string;
 };
+
 export const InputForm = ({
   label,
   type,
@@ -29,6 +129,7 @@ export const InputForm = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [hasValue, setHasValue] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const inputType =
@@ -37,11 +138,11 @@ export const InputForm = ({
   const isError = Boolean(errors[errorType]);
 
   const errorMessage = errors[errorType]?.message;
-
   const errorT = errorMessage ? t(String(errorMessage)) : "";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHasValue(e.target.value.length > 0);
+    if (type === "password") setPasswordValue(e.target.value);
     register?.onChange?.(e);
   };
 
@@ -94,17 +195,17 @@ export const InputForm = ({
           }}
           onChange={handleChange}
           className={`
-        peer w-full rounded-xl border bg-white/5 backdrop-blur-sm
-        px-3.5 pr-11 text-sm text-gray-100 outline-none
-        placeholder:text-gray-500 caret-[#007aff]
-        transition-[border-color,box-shadow,padding] duration-300
-        ${isFloating ? "pt-6 pb-2.5" : "py-[17px]"}
-        ${
-          isError
-            ? "border-red-500/60 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-            : "border-white/10 focus:border-[#007aff]/70 focus:ring-2 focus:ring-[#007aff]/20"
-        }
-      `}
+            peer w-full rounded-xl border bg-white/5 backdrop-blur-sm
+            px-3.5 pr-11 text-sm text-gray-100 outline-none
+            placeholder:text-gray-500 caret-[#007aff]
+            transition-[border-color,box-shadow,padding] duration-300
+            ${isFloating ? "pt-6 pb-2.5" : "py-[17px]"}
+            ${
+              isError
+                ? "border-red-500/60 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
+                : "border-white/10 focus:border-[#007aff]/70 focus:ring-2 focus:ring-[#007aff]/20"
+            }
+          `}
         />
 
         <motion.span
@@ -144,6 +245,8 @@ export const InputForm = ({
           </motion.button>
         )}
       </div>
+
+      {type === "password" && <StrengthBar password={passwordValue} />}
 
       <AnimatePresence>
         {isError && errorT && (

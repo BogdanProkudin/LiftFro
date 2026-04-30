@@ -1,1 +1,38 @@
-{}
+{
+  "Header": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "profile": "Profil",
+    "logout": "Abmelden"
+  },
+  "Navigation": {
+    "home": "Startseite",
+    "programs": "Programme",
+    "track": "Tracking",
+    "social": "Community",
+    "scan": "Scannen"
+  },
+  "Footer": {
+    "copyright": "© {year} Liftly. Alle Rechte vorbehalten."
+  },
+  "HomePage": {
+    "title": "Dashboard",
+    "subtitle": "Willkommen zurück! Hier ist dein Fitness-Überblick."
+  },
+  "ProgramsPage": {
+    "title": "Programme",
+    "subtitle": "Durchsuche und verwalte deine Trainingsprogramme."
+  },
+  "TrackPage": {
+    "title": "Tracking",
+    "subtitle": "Protokolliere deine Trainings und verfolge deinen Fortschritt."
+  },
+  "SocialPage": {
+    "title": "Community",
+    "subtitle": "Verbinde dich mit der Fitness-Community."
+  },
+  "ScanPage": {
+    "title": "Scannen",
+    "subtitle": "Scanne Lebensmitteletiketten und erhalte Ernährungseinblicke."
+  }
+}

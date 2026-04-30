@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import { MainProvider } from "./providers";
 import { getLocale, getMessages } from "next-intl/server";
+import { cookies } from "next/headers";
+
+import "./globals.css";
+import { getUser } from "@/entities/user";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,6 +15,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -25,13 +34,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const user = await getUser();
   const messages = await getMessages();
+  const themeCookie = (await cookies()).get("theme")?.value ?? "system";
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html className={themeCookie} lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased`}
       >
-        <MainProvider locale={locale} messages={messages}>
+        <MainProvider initialUser={user} locale={locale} messages={messages}>
           {children}
         </MainProvider>
       </body>

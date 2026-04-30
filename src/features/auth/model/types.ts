@@ -9,7 +9,9 @@ export type LoginResponse = {
 export type RegistrationData = {
   email: string;
   password: string;
-  username: string;
+
+  locale: string;
+  theme: string;
 };
 export type RegistrationResponse = {
   message: string;
@@ -20,4 +22,24 @@ export type AuthData = {
   password: string;
   username: string;
   confirmPassword?: string;
+};
+
+export type ForgotPasswordData = {
+  email: string;
+};
+export type ForgotPasswordResponse = {
+  message: string;
+};
+export type VerifyData = {
+  token: string;
+};
+export type VerifyResponse = {
+  valid: boolean;
+};
+export type ResetPasswordData = {
+  password: string;
+  token: string;
+};
+export type ResetPasswordResponse = {
+  message: string;
 };

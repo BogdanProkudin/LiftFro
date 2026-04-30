@@ -1,4 +1,11 @@
-export { login, registration, setUser, authReducer } from "./model/auth-slice";
+export {
+  login,
+  registration,
+  setUser,
+  authReducer,
+  verifyToken,
+  resetPassword,
+} from "./model/auth-slice";
 export { authApi } from "./model/auth-api";
 export type {
   LoginResponse,
@@ -6,4 +13,8 @@ export type {
   AuthData,
   LoginData,
   RegistrationData,
+  ResetPasswordData,
+  ResetPasswordResponse,
+  VerifyData,
+  VerifyResponse,
 } from "./model/types";

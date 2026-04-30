@@ -1,5 +1,12 @@
-import axios from "../../../config/axios-config";
-import { LoginData, RegistrationData } from "./types";
+import axios from "../../../shared/config/axios-config";
+
+import {
+  ForgotPasswordData,
+  LoginData,
+  RegistrationData,
+  ResetPasswordData,
+  VerifyData,
+} from "./types";
 
 export const authApi = {
   registration: (data: RegistrationData) =>
@@ -10,4 +17,16 @@ export const authApi = {
     axios.post("auth/login", data, {
       withCredentials: true,
     }),
+
+  forgotPassword: (data: ForgotPasswordData) =>
+    axios.post("auth/forgot-password", data),
+
+  validateToken: (data: VerifyData) =>
+    axios.get(`auth/validate-token?token=${data.token}`),
+  resetPassword: (data: ResetPasswordData) =>
+    axios.post("auth/reset-password", data, {
+      withCredentials: true,
+    }),
+  verifyRegistration: (data: VerifyData) =>
+    axios.get(`auth/verify-register?token=${data.token}`),
 };

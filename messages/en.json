@@ -17,6 +17,13 @@
     "register": "Sign Up",
     "ErrorGlobalMess": "Something went wrong. Please try again."
   },
+  "PasswordStrength": {
+    "label": "Password",
+    "weak": "Weak",
+    "fair": "Fair",
+    "good": "Good",
+    "strong": "Strong"
+  },
   "RegistrationPage": {
     "title": "Create an Account",
     "description": "Join our community and start your fitness journey today.",
@@ -31,8 +38,38 @@
     "haveAccount": "Already have an account?",
     "confirmPasswordPlaceholder": "",
     "login": "Log In",
-    "ErrorGlobalMess": "Something went wrong. Please try again."
+    "ErrorGlobalMess": "Something went wrong. Please try again.",
+    "checkEmail": "Check your email for a verification link.",
+    "successTitle": "Registration Successful!",
+    "goToLogin": "Back to Login"
   },
+
+  "ForgotPassPage": {
+    "title": "Reset Your Password",
+    "description": "Please provide the email address associated with your account. You’ll receive a link to create a new password.",
+    "sendEmail": "Send Email",
+    "submit": "Send Reset Link",
+    "emailLabel": "Email",
+    "link": "Remember your password? Back to login",
+    "emailPlaceholder": "",
+    "successMessage": "The password reset link was sent to your email",
+    "errorMessage": "Something went wrong. Please try again.",
+    "toastMessGlobal": "Something went wrong. Try again"
+  },
+  "ResetPasswordPage": {
+    "title": "Create a New Password",
+    "description": "Your new password must be secure and easy to remember",
+    "submit": "Reset Password",
+    "passwordPlaceholder": "",
+    "passwordLabel": "Password",
+    "confirmPasswordPlaceholder": "",
+    "confirmPasswordLabel": "Confirm Password",
+    "link": "Back to Login",
+    "toastMessSuccess": "Your password was reset",
+    "toastMessVerify": "Token is not valid",
+    "toastMessGlobal": "Something went wrong. Try again"
+  },
+
   "Errors": {
     "Unauthorized": "Unauthorized access. Please log in to continue.",
     "Forbidden": "You do not have permission to access this resource.",
@@ -45,7 +82,7 @@
     "or": "OR"
   },
   "ValidationMessages": {
-    "usernameRequired": "Nickname is required",
+    "usernameRequired": "Username is required",
     "usernameMin": "Nickname must be at least 4 characters",
     "usernameMax": "Nickname must be at most 20 characters",
     "emailRequired": "Email Address is required",
@@ -55,6 +92,187 @@
     "passwordMin": "Password must be at least 6 characters",
     "passwordMax": "Password must be at most 20 characters",
     "confirmPasswordRequired": "Confirm Password is required",
-    "confirmPasswordValid": "Passwords must match"
+    "confirmPasswordValid": "Passwords must match",
+    "nameRequired": "Full name is required",
+    "bioMaxLength": "Bio must be at most 160 characters",
+    "birthDateRequired": "Birth year is required",
+    "birthDateMinAge": "You must be at least 14 years old",
+    "heightRequired": "Height must be between 50 and 300 cm",
+    "weightRequired": "Weight must be between 20 and 300 kg",
+    "genderRequired": "Gender is required",
+    "unitSystemRequired": "Please select a unit system",
+    "isPublicRequired": "Please select profile privacy",
+    "goalTypeRequired": "Primary goal is required",
+    "goalTargetWeightRequired": "Target weight is required (20-300kg)",
+    "goalTargetDateRequired": "Target date is required",
+    "fitnessLevelRequired": "Fitness level is required",
+    "experienceMonthsRequired": "Experience is required",
+    "activityLevelRequired": "Activity level must be between 1 and 5",
+    "limitationsRequired": "Please describe your limitations"
+  },
+  "ErrorAuthPage": {
+    "badge": "Authentication Error",
+    "titleLine1": "Session expired",
+    "titleLine2": "Try Again",
+    "description": "Your verification token is invalid or has expired. Please log in again to continue.",
+    "backToLogin": "Log in again",
+    "getHelp": "Contact support",
+    "footerHint": "Token has expired · Please re-authenticate"
+  },
+  "ErrorPage": {
+    "title": "Oops! Something Went Wrong",
+    "description": "It looks like the link you followed is invalid or has expired. Please try requesting a new one.",
+    "backToLogin": "Return to Login",
+    "contactSupport": "Contact Support"
+  },
+  "Header": {
+    "login": "Log In",
+    "register": "Sign Up",
+    "profile": "Profile",
+    "logout": "Log Out"
+  },
+  "Navigation": {
+    "home": "Home",
+    "programs": "Programs",
+    "track": "Track",
+    "social": "Social",
+    "scan": "Scan"
+  },
+  "Footer": {
+    "copyright": "© {year} Liftly. All rights reserved."
+  },
+  "HomePage": {
+    "title": "Dashboard",
+    "subtitle": "Welcome back! Here's your fitness overview."
+  },
+  "ProgramsPage": {
+    "title": "Programs",
+    "subtitle": "Browse and manage your training programs."
+  },
+  "TrackPage": {
+    "title": "Track",
+    "subtitle": "Log your workouts and track your progress."
+  },
+  "SocialPage": {
+    "title": "Social",
+    "subtitle": "Connect with the fitness community."
+  },
+  "ScanPage": {
+    "title": "Scan",
+    "subtitle": "Scan food labels and get nutritional insights."
+  },
+  "VerifyTokenPage": {
+    "loading_step1": "Checking verification link...",
+    "loading_step2": "Validating secure session...",
+    "loading_step3": "Finalizing your activation...",
+    "loading": "Verifying your account...",
+    "successTitle": "Verification Successful!",
+    "successDescription": "Your account has been successfully verified. You can now log in to your account.",
+    "continue": "Continue to Login"
+  },
+  "OnBoardingPage": {
+    "step": "Step",
+    "of": "of",
+    "onboardingSuccess": "Onboarding completed! Welcome to Liftly!",
+    "onboardingError": "Something went wrong. Please try again!",
+    "nextButton": "Continue",
+    "backButton": "Back",
+    "finishButton": "Finish",
+    "skipButton": "Skip for now",
+    "completeButton": "Complete",
+    "loadingButton": "Completing...",
+    "step0": {
+      "title": "Build Your Profile",
+      "subtitle": "Let's personalize your Liftly experience.",
+      "nameLabel": "Full Name",
+      "usernameLabel": "Username",
+      "bioLabel": "Bio (Optional)",
+      "unitSystemLabel": "Unit System",
+      "privacyLabel": "Profile Privacy"
+    },
+    "step1": {
+      "title": "Personal Information",
+      "subtitle": "Tell us a bit about yourself.",
+      "labelGender": "Gender",
+      "optionsGender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "birthdayLabel": "Date of Birth",
+      "heightLabel": "Height (cm)",
+      "heightLabelIn": "Height (in)",
+      "weightLabel": "Weight (kg)",
+      "weightLabelLbs": "Weight (lbs)"
+    },
+    "step2": {
+      "title": "Your Goal",
+      "subtitle": "What do you want to achieve?",
+      "labelGoal": "Primary Goal",
+      "optionsGoal": {
+        "strength": "Strength",
+        "strengthDescription": "Build raw strength and lift heavier",
+        "hypertrophy": "Hypertrophy",
+        "hypertrophyDescription": "Maximize muscle size and volume",
+        "powerlifting": "Powerlifting",
+        "powerliftingDescription": "Squat, bench, deadlift competition prep",
+        "endurance": "Endurance",
+        "enduranceDescription": "Improve stamina and cardiovascular fitness",
+        "fatLoss": "Fat Loss",
+        "fatLossDescription": "Burn fat and get leaner",
+        "generalFitness": "General Fitness",
+        "generalFitnessDescription": "Stay healthy and active",
+        "athleticPerformance": "Athletic Performance",
+        "athleticPerformanceDescription": "Boost speed, power and agility",
+        "rehabilitation": "Rehabilitation",
+        "rehabilitationDescription": "Recover from injury and rebuild strength"
+      },
+      "labelTargetWeight": "Target Weight (kg)",
+      "labelTargetWeightLbs": "Target Weight (lbs)",
+      "labelTargetDate": "Target Date"
+    },
+    "step3": {
+      "title": "Fitness Profile",
+      "subtitle": "What's your current fitness level?",
+      "labelFitnessLevel": "Fitness Level",
+      "optionsFitnessLevel": {
+        "beginner": "Beginner",
+        "beginnerDescription": "Just starting out",
+        "intermediate": "Intermediate",
+        "intermediateDescription": "Some experience",
+        "advanced": "Advanced",
+        "advancedDescription": "Very experienced",
+        "expert": "Expert",
+        "expertDescription": "Elite level athlete"
+      },
+      "labelTrainingExperience": "Training Experience",
+      "labelActivityLevel": "Activity Level"
+    },
+    "step4": {
+      "title": "Training Preferences",
+      "subtitle": "How do you prefer to train?",
+      "labelPlace": "Training Location",
+      "optionsPlace": {
+        "gym": "Gym",
+        "home": "Home",
+        "outdoor": "Outdoor"
+      },
+      "labelFrequency": "Training Frequency",
+      "labelDuration": "Session Duration (min)",
+      "labelEquipment": "Equipment Available"
+    },
+    "step5": {
+      "title": "Limitations",
+      "subtitle": "Any injuries or health conditions?",
+      "noTextSection": "No limitations added yet",
+      "removeLimitationButton": "Remove",
+      "labelType": "Type",
+      "optionsLimitations": {
+        "injury": "Injury",
+        "healthCondition": "Health Condition",
+        "other": "Other"
+      },
+      "labelDescription": "Description",
+      "addLimitationButton": "Add Limitation"
+    }
   }
 }

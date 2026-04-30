@@ -18,12 +18,11 @@ import { useAppSelector } from "@/shared/hooks/redux-hook";
 
 import { Status } from "@/shared/types/status";
 import ButtonDefault from "@/shared/ui/buttons/button-default";
-import toast from "react-hot-toast";
 
 const LoginForm = () => {
-  const { status } = useAppSelector((state) => state.auth);
+  const { status, error } = useAppSelector((state) => state.auth);
   const t = useTranslations("LoginPage");
-  const errorT = useTranslations("Errors");
+
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -41,19 +40,10 @@ const LoginForm = () => {
 
   const isFormValid = email && password;
 
-  const [error, setError] = useState("");
-
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-    try {
-      const res = await dispatch(login(data));
-      if (res.meta.requestStatus === "fulfilled") {
-        router.replace("/");
-      } else {
-        toast.error(errorT("SomeThingWentWrong"));
-      }
-    } catch (err: unknown) {
-      const error = err as string;
-      setError(error || errorT("SomeThingWentWrong"));
+    const res = await dispatch(login(data));
+    if (res.meta.requestStatus === "fulfilled") {
+      router.replace("/");
     }
   };
   return (
